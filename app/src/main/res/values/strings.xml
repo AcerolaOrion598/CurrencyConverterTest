@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CurrencyConverterTest</string>
+    <string name="base_currency_input_hint">Введите сумму, €</string>
+    <string name="convert_to_label">Перевести в:</string>
+    <string name="unacceptable_characters">Недопустимые символы!</string>
+    <string-array name="currencyCodes">
+        <item>RUB</item>
+        <item>USD</item>
+        <item>GBP</item>
+        <item>CHF</item>
+        <item>CNY</item>
+    </string-array>
+</resources>
