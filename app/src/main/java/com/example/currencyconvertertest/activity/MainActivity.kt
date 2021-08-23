@@ -12,14 +12,15 @@ import com.example.currencyconvertertest.view_model.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var baseCurrencyEd: EditText
-    private var currentExchangeRate: Double = 0.0
-    private var currentCurrency: Currency? = null
+    private var currentExchangeRate: Double? = null
+    private var finalCurrency: Currency? = null
     private var resultSumTv: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             currentExchangeRate = exchangeRate
             printResult()
         })
-        mainViewModel.setExchangeRate(2.0)
     }
 
     private fun setupCurrencySpinner() {
@@ -66,13 +66,15 @@ class MainActivity : AppCompatActivity() {
                 id: Long
             ) {
                 parent?.let {
-                    currentCurrency = it.selectedItem as Currency
+                    val selectedCurrency = it.selectedItem as Currency
+                    finalCurrency = selectedCurrency
                     resultSumTv?.text = ""
                     GlobalScope.launch(Dispatchers.IO) {
-                        Thread.sleep(1000)
-                        mainViewModel.setExchangeRate(3.0)
+                        mainViewModel.requestExchangeRate(
+                            Currency.getInstance("EUR"), selectedCurrency,
+                            getString(R.string.access_key)
+                        )
                     }
-                    Toast.makeText(this@MainActivity, mainViewModel.test(), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -81,16 +83,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun printResult() {
-        currentCurrency?.let {
+        finalCurrency?.let {
             val baseCurrencyStr = baseCurrencyEd.text.toString()
-            val result = if (baseCurrencyStr.isNotEmpty())
-                try {
-                    "${it.symbol} ${baseCurrencyStr.toDouble() * currentExchangeRate}"
-                } catch (e: NumberFormatException) {
-                    getString(R.string.unacceptable_characters)
-                }
-            else
-                ""
+
+            val result = when {
+                baseCurrencyStr.isEmpty() -> ""
+                currentExchangeRate == null -> getString(R.string.something_went_wrong)
+                else ->
+                    try {
+                        "${it.symbol} ${baseCurrencyStr.toDouble() * currentExchangeRate!!}"
+                    } catch (e: NumberFormatException) {
+                        getString(R.string.unacceptable_characters)
+                    }
+            }
 
             resultSumTv?.text = result
         }
