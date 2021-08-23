@@ -2,10 +2,7 @@ package com.example.currencyconvertertest.activity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.widget.addTextChangedListener
@@ -15,9 +12,7 @@ import com.example.currencyconvertertest.view_model.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,9 +69,10 @@ class MainActivity : AppCompatActivity() {
                     currentCurrency = it.selectedItem as Currency
                     resultSumTv?.text = ""
                     GlobalScope.launch(Dispatchers.IO) {
-                        Thread.sleep(2000)
+                        Thread.sleep(1000)
                         mainViewModel.setExchangeRate(3.0)
                     }
+                    Toast.makeText(this@MainActivity, mainViewModel.test(), Toast.LENGTH_SHORT).show()
                 }
             }
 
