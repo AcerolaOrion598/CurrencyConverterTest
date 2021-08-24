@@ -7,7 +7,7 @@ class MainRepository {
     fun requestExchangeRate(
         baseCurrency: Currency, finalCurrency: Currency, accessKey: String
     ): Double? {
-        val currencyDataSource = CurrencyDataSourceFactory.getInstance()
-        return currencyDataSource.requestExchangeRate(baseCurrency, finalCurrency, accessKey)
+        val currencyDataSource = CurrencyDataSourceFactory.getInstance(accessKey)
+        return currencyDataSource.requestExchangeRate(baseCurrency, finalCurrency)
     }
 }

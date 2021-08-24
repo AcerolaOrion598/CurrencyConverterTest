@@ -2,7 +2,10 @@ package com.example.currencyconvertertest.activity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.widget.addTextChangedListener
@@ -12,7 +15,6 @@ import com.example.currencyconvertertest.view_model.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -39,8 +41,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(
             MainViewModel::class.java
         )
-        mainViewModel.getExchangeRate().observe(this, { exchangeRate ->
-            currentExchangeRate = exchangeRate
+        mainViewModel.getExchangeRate().observe(this, {
+            currentExchangeRate = it
             printResult()
         })
     }
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 currentExchangeRate == null -> getString(R.string.something_went_wrong)
                 else ->
                     try {
-                        "${it.symbol} ${baseCurrencyStr.toDouble() * currentExchangeRate!!}"
+                        "${it.symbol} ${String.format("%.2f", baseCurrencyStr.toDouble() * currentExchangeRate!!)}"
                     } catch (e: NumberFormatException) {
                         getString(R.string.unacceptable_characters)
                     }

@@ -1,6 +1,7 @@
 package com.example.currencyconvertertest.di
 
 import com.example.currencyconvertertest.model.MainRepository
+import com.example.currencyconvertertest.model.data_source.OfflineCurrencyDataSource
 import com.example.currencyconvertertest.model.data_source.OnlineCurrencyDataSource
 import com.example.currencyconvertertest.view_model.MainViewModel
 import dagger.Component
@@ -12,4 +13,5 @@ interface AppComponent {
     fun inject(mainViewModel: MainViewModel)
     fun inject(mainRepository: MainRepository)
     fun inject(onlineCurrencyDataSource: OnlineCurrencyDataSource)
+    fun inject(offlineCurrencyDataSource: OfflineCurrencyDataSource)
 }
