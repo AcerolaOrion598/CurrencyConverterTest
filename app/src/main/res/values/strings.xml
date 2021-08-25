@@ -6,6 +6,8 @@
     <string name="something_went_wrong">Что-то пошло не так…</string>
     <string name="access_key">YOUR_ACCESS_KEY</string>
     <string name="rate_label">Курс:</string>
+    <string name="settings_name">app_settings</string>
+    <string name="last_selected_currency_code_setting">last_selected_currency_code_setting</string>
     <string-array name="currencyCodes">
         <item>RUB</item>
         <item>USD</item>

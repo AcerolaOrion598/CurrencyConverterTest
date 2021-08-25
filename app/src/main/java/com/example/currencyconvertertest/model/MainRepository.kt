@@ -5,17 +5,24 @@ import com.example.currencyconvertertest.model.network.OnlineServerException
 import java.util.*
 
 class MainRepository {
-    fun requestExchangeRate(
+    fun getExchangeRate(
         baseCurrency: Currency, finalCurrency: Currency, accessKey: String
     ): Double? {
         return try {
-            CurrencyDataSourceFactory.getInstance(accessKey = accessKey).requestExchangeRate(
-                baseCurrency, finalCurrency
-            )
+            requestExchangeRate(baseCurrency, finalCurrency, accessKey = accessKey)
         } catch (e: OnlineServerException) {
-            CurrencyDataSourceFactory.getInstance(onlineServerError =  true).requestExchangeRate(
-                baseCurrency, finalCurrency
-            )
+            requestExchangeRate(baseCurrency, finalCurrency, onlineServerError = true)
         }
+    }
+
+    private fun requestExchangeRate(
+        baseCurrency: Currency,
+        finalCurrency: Currency,
+        accessKey: String = "",
+        onlineServerError: Boolean = false
+    ): Double? {
+        return CurrencyDataSourceFactory.getInstance(
+            accessKey, onlineServerError
+        ).requestExchangeRate(baseCurrency, finalCurrency)
     }
 }

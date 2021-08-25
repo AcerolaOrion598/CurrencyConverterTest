@@ -20,18 +20,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var exchangeRate: MutableLiveData<Double?> = MutableLiveData()
 
-    fun getExchangeRate(): MutableLiveData<Double?> = exchangeRate
+    fun getExchangeRateData(): MutableLiveData<Double?> = exchangeRate
 
-    fun requestExchangeRate(
+    fun getExchangeRate(
         baseCurrency: Currency, resultCurrency: Currency, accessKey: String
     ) {
-        val exchangeRate = mainRepository.requestExchangeRate(
+        val exchangeRate = mainRepository.getExchangeRate(
             baseCurrency, resultCurrency, accessKey
         )
-        setExchangeRate(exchangeRate)
+        setExchangeRateData(exchangeRate)
     }
 
-    private fun setExchangeRate(exchangeRate: Double?) {
+    private fun setExchangeRateData(exchangeRate: Double?) {
         this.exchangeRate.postValue(exchangeRate)
     }
 }

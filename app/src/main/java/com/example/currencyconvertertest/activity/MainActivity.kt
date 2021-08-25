@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(
             MainViewModel::class.java
         )
-        mainViewModel.getExchangeRate().observe(this, {
+        mainViewModel.getExchangeRateData().observe(this, {
             currentExchangeRate = it
             rateValueTV?.text = it?.toString() ?: ""
             printResult()
@@ -62,7 +62,20 @@ class MainActivity : AppCompatActivity() {
         currencySpinner.adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_item, currencyList
         )
-        currencySpinner.setSelection(0)
+
+        val settingsName = getString(R.string.settings_name)
+        val lastSelectedCurrencyCodeSetting = getString(
+            R.string.last_selected_currency_code_setting
+        )
+        val settings = getSharedPreferences(settingsName, MODE_PRIVATE)
+        if (settings.contains(lastSelectedCurrencyCodeSetting)) {
+            val currencyCode = settings.getString(lastSelectedCurrencyCodeSetting, "")
+            val lastSelectedIndex = currencyList.indexOfFirst {
+                it.currencyCode == currencyCode
+            }
+            currencySpinner.setSelection(lastSelectedIndex)
+        }
+
         currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -72,15 +85,19 @@ class MainActivity : AppCompatActivity() {
             ) {
                 parent?.let {
                     val selectedCurrency = it.selectedItem as Currency
-                    finalCurrency = selectedCurrency
-                    rateValueTV?.text = ""
-                    resultSumTv?.text = ""
                     GlobalScope.launch(Dispatchers.IO) {
-                        mainViewModel.requestExchangeRate(
+                        mainViewModel.getExchangeRate(
                             Currency.getInstance("EUR"), selectedCurrency,
                             getString(R.string.access_key)
                         )
                     }
+
+                    settings.edit().putString(
+                        lastSelectedCurrencyCodeSetting, selectedCurrency.currencyCode
+                    ).apply()
+                    finalCurrency = selectedCurrency
+                    rateValueTV?.text = ""
+                    resultSumTv?.text = ""
                 }
             }
 
