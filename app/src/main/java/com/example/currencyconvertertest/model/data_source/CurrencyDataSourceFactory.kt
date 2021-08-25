@@ -7,8 +7,10 @@ class CurrencyDataSourceFactory {
         private var onlineInstance: OnlineCurrencyDataSource? = null
         private var offlineInstance: OfflineCurrencyDataSource? = null
 
-        fun getInstance(accessKey: String): ICurrencyDataSource {
-            return if (Utils.isServerAvailable()) {
+        fun getInstance(
+            accessKey: String = "", onlineServerError: Boolean = false
+        ): ICurrencyDataSource {
+            return if (!onlineServerError && Utils.isServerAvailable()) {
                 if (onlineInstance == null)
                     onlineInstance = OnlineCurrencyDataSource(accessKey)
                 onlineInstance!!

@@ -5,6 +5,7 @@
     <string name="unacceptable_characters">Недопустимые символы!</string>
     <string name="something_went_wrong">Что-то пошло не так…</string>
     <string name="access_key">YOUR_ACCESS_KEY</string>
+    <string name="rate_label">Курс:</string>
     <string-array name="currencyCodes">
         <item>RUB</item>
         <item>USD</item>

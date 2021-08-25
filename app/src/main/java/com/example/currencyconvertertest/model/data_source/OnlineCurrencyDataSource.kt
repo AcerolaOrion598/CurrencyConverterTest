@@ -4,6 +4,7 @@ import com.example.currencyconvertertest.App
 import com.example.currencyconvertertest.model.database.AppDatabase
 import com.example.currencyconvertertest.model.database.entity.ExchangeRateTable
 import com.example.currencyconvertertest.model.network.NetworkInterface
+import com.example.currencyconvertertest.model.network.OnlineServerException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,7 +49,7 @@ class OnlineCurrencyDataSource(private val accessKey: String) : ICurrencyDataSou
                 }
             }
         }
-        return null
+        throw OnlineServerException()
     }
 
     private fun storeExchangeRate(

@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var baseCurrencyEd: EditText
     private var currentExchangeRate: Double? = null
     private var finalCurrency: Currency? = null
+    private var rateValueTV: TextView? = null
     private var resultSumTv: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         baseCurrencyEd = findViewById(R.id.base_currency_ed)
+        rateValueTV = findViewById(R.id.rate_value_tv)
         resultSumTv = findViewById(R.id.result_sum_tv)
 
         baseCurrencyEd.addTextChangedListener {
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         )
         mainViewModel.getExchangeRate().observe(this, {
             currentExchangeRate = it
+            rateValueTV?.text = it?.toString() ?: ""
             printResult()
         })
     }
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                 parent?.let {
                     val selectedCurrency = it.selectedItem as Currency
                     finalCurrency = selectedCurrency
+                    rateValueTV?.text = ""
                     resultSumTv?.text = ""
                     GlobalScope.launch(Dispatchers.IO) {
                         mainViewModel.requestExchangeRate(
